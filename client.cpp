@@ -1,6 +1,6 @@
-#include <string>
 #include <iostream>
 #include <regex>
+#include <string>
 
 #include <chrono>
 #include <thread>
@@ -45,9 +45,9 @@ behavior parser(event_based_actor* self, actor server) {
           }
           quotes_open = !quotes_open;
           continue;
-        } else if(' ' == line[i] && !(braces_open  || quotes_open)) {
-            words.push_back(word);
-            word.clear();
+        } else if (' ' == line[i] && !(braces_open || quotes_open)) {
+          words.push_back(word);
+          word.clear();
           continue;
         }
         word += line[i];
@@ -80,15 +80,15 @@ public:
   std::string file;
 
   config() {
-    add_message_type<log_entry>("log_entry");    
+    add_message_type<log_entry>("log_entry");
     opt_group{custom_options_, "global"}
-        .add(port, "port, p", "set port")
-        .add(hostname, "hostname, h", "set hostname")
-        .add(file, "file, f", "log file");
+      .add(port, "port, p", "set port")
+      .add(hostname, "hostname, h", "set hostname")
+      .add(file, "file, f", "log file");
   }
 };
 
-void caf_main(actor_system &sys, const config &cfg) {
+void caf_main(actor_system& sys, const config& cfg) {
 
   auto server = sys.middleman().remote_actor(cfg.hostname, cfg.port);
   std::cout << server.error().code() << std::endl;

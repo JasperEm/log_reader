@@ -14,10 +14,15 @@ include_directories(${ARROW_INCLUDE_DIR})
 find_package(Plasma REQUIRED)
 include_directories(${PLASMA_INCLUDE_DIR})
 
-macro(add name)
-    add_executable(${name} ${name}.cpp ${ARGN})
+macro(add_with_arrow name)
+    add_executable(${name} ${name}.cpp writer.cpp ${ARGN})
     target_link_libraries(${name} ${CAF_LIBRARIES} ${ARROW_SHARED_LIB} ${PLASMA_SHARED_LIB})
 endmacro()
 
+macro(add name)
+    add_executable(${name} ${name}.cpp ${ARGN})
+    target_link_libraries(${name} ${CAF_LIBRARIES})
+endmacro()
+
 add(client)
-add(server)
+add_with_arrow(server)
