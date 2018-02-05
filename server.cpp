@@ -12,7 +12,7 @@ behavior server(std::shared_ptr<Writer> writer) {
   return {[=](write_atom, log_entry entry) {
     std::cout << "host: " << entry.host << ", date: " << entry.date
               << ", status: " << entry.status << ", size: " << entry.size
-              << ", ip:" << entry.ip << ", user_agend: " << entry.user_agend
+              << ", ip:" << entry.ip << ", user_agend: " << entry.user_agent
               << ", request: " << entry.request << std::endl;
     auto batch = writer->transpose(entry);
     writer->write(batch);
@@ -29,7 +29,6 @@ public:
 };
 
 void caf_main(actor_system& sys, const config& cfg) {
-  //Writer writer("/tmp/plasma");
   auto writer = std::make_shared<Writer>("/tmp/plasma");
   auto a = sys.spawn(server, writer);
   auto state = sys.middleman().publish(a, cfg.port);

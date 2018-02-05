@@ -15,12 +15,12 @@ struct log_entry {
   u_int16_t status;
   u_int16_t size;
   std::string ip;
-  std::string user_agend;
+  std::string user_agent;
   std::string request;
 };
 
 template <class Inspector>
 typename Inspector::result_type inspect(Inspector& f, log_entry& x) {
   return f(meta::type_name("log_entry"), x.date, x.host, x.status, x.size, x.ip,
-           x.user_agend, x.request);
+           x.user_agent, x.request);
 }

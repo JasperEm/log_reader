@@ -58,13 +58,13 @@ behavior parser(event_based_actor* self, actor server) {
         entry.ip = words[1];
         entry.size = std::stoi(words[11]);
         entry.status = std::stoi(words[10]);
-        entry.user_agend = words[14];
+        entry.user_agent = words[14];
         entry.request = words[8];
       } else {
         entry.date = words[3];
         entry.status = std::stoi(words[7]);
         entry.size = std::stoi(words[8]);
-        entry.user_agend = words[11];
+        entry.user_agent = words[11];
         entry.request = words[5];
       }
       self->send(server, write_atom::value, entry);

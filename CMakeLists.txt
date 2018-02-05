@@ -26,3 +26,4 @@ endmacro()
 
 add(client)
 add_with_arrow(server)
+add_with_arrow(test)
