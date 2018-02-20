@@ -85,8 +85,6 @@ void Writer::write(std::shared_ptr<RecordBatch> batch) {
   std::shared_ptr<Buffer> pBuf;
   auto oid = plasma::ObjectID::from_random();
   std::shared_ptr<arrow::Buffer> buffer;
- // uint8_t* metadata = *batch->schema()->metadata();
- // int64_t metadata_size = batch->schema()->metadata()->size();
   auto status = plasma_client_.Create(oid, buf->size(), nullptr,
                                       0, &pBuf);
   if (status.ok()) {

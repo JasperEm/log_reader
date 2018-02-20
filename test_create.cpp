@@ -4,10 +4,10 @@
 #include "arrow/builder.h"
 #include "arrow/io/api.h"
 #include "arrow/ipc/api.h"
+#include "arrow/status.h"
 #include "arrow/type.h"
 #include "plasma/client.h"
 #include "plasma/common.h"
-#include "arrow/status.h"
 
 using namespace arrow;
 
@@ -66,7 +66,23 @@ Status write_arrow_batch() {
     plasma_client_.Create(oid, buf->size(), nullptr, 0, &buffer));
   std::memcpy(buffer->mutable_data(), buf->data(), buf->size());
   ARROW_RETURN_NOT_OK(plasma_client_.Seal(oid));
-
+  // load Batch from plasma
+  plasma::ObjectBuffer pbuf;
+  auto buf1 = plasma_client_.Get(&oid, 1, 10, &pbuf);
+  std::shared_ptr<Buffer> ab;
+  ab = pbuf.data;
+  arrow::io::BufferReader bufferReader(ab);
+  std::shared_ptr<arrow::RecordBatch> b;
+  std::shared_ptr<arrow::ipc::RecordBatchReader> br;
+  ARROW_RETURN_NOT_OK(
+    arrow::ipc::RecordBatchStreamReader::Open(&bufferReader, &br));
+  ARROW_RETURN_NOT_OK(br->ReadNext(&b));
+  std::cout << b->schema()->ToString() << " " << b->num_rows() << std::endl;
+  std::cout << b->column(0)->ToString() << " " << b->column(1)->ToString()
+            << " " << b->column(2)->ToString() << " "
+            << b->column(3)->ToString() << " " << b->column(4)->ToString()
+            << " " << b->column(5)->ToString() << " "
+            << b->column(6)->ToString() << std::endl;
   return Status::OK();
 }
 
